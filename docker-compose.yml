@@ -1,0 +1,34 @@
+services:
+    php:
+      build: .  
+      container_name: php-container  
+      expose:  
+       - 9000 
+      volumes:
+        - ./app:/var/www/html/ #tell composer to map src with var path
+      depends_on:
+        - db
+    nginx:
+      build: ./nginx/
+      image: nginx:latest
+      container_name: nginx_container
+      ports:
+        - 80:80
+      depends_on:
+        - php
+      links:
+        - php
+      volumes_from:
+        - php
+    db:
+      image: mysql
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=xsolla_games
+      volumes:
+        - mysql-data:/var/lib/mysql #whenever container restart/start it will take old data from host file mysql-data to container file /var..
+      restart: always
+      ports:
+        - 3306:3306
+volumes:
+  mysql-data:
