@@ -1,5 +1,5 @@
 CREATE TABLE `xsolla_games`.`games` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NULL,
   `platform` VARCHAR(45) NULL,
   `star_rating` INT NULL,
