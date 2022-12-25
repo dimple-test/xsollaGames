@@ -6,7 +6,7 @@
         <th scope="col">Platform</th>
         <th scope="col">Star Rating</th>
         <th scope="col">Review Text</th>
-        <th scope="col">Last_played</th>
+        <th scope="col">Last Played</th>
         <th scope="col">Action</th>
         </tr>
     </thead>
@@ -22,7 +22,7 @@
                         <td><?php echo $val['platform']; ?></td>
                         <td><?php echo $val['star_rating']; ?></td>
                         <td><?php echo $val['review']; ?></td>
-                        <td><?php echo $val['last_played']; ?></td>
+                        <td><?php echo date('m/d/Y h:i', strtotime($val['last_played'])); ?></td>
                         <td>
                             <a class="editGame" data-id="<?php echo $val['id']; ?>" href="#" data-bs-toggle="modal" data-bs-target="#addEditGameModal"><i class="bi bi-pencil-square me-3"></i></a>
                             <a href="#" data-id="<?php echo $val['id']; ?>" class="deleteGame"><i class="bi bi-trash"></i></a>

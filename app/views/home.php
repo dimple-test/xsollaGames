@@ -6,6 +6,10 @@
         <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
         <link rel="stylesheet" href="/css/bootstrap-icons.css">
         <link href="/css/custom.css" rel="stylesheet" crossorigin="anonymous">
+        
+        <!-- Tempus Dominus Styles -->
+        <link rel="stylesheet" href="/css/datetimepicker/tempus-dominus.min.css" crossorigin="anonymous">
+
     </head>
     <body>
         <main>
@@ -47,7 +51,16 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="inputLastPlay" class="form-label">Lastly Played on</label>
-                                            <input name="last_played" type="text" class="form-control" id="inputLastPlay" aria-describedby="platformHelp">
+                                            <!-- <input name="last_played" type="text" class="form-control" id="inputLastPlay" aria-describedby="platformHelp"> -->
+                                            
+                                            <div class="input-group" id="datetimepicker1" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                            
+                                                <input name="last_played" id="inputLastPlay" type="text" class="form-control" data-td-target="#datetimepicker1" />
+                                                <span class="input-group-text" data-td-target="#datetimepicker1" data-td-toggle="datetimepicker">
+                                                    <span class="fas fa-calendar"></span>
+                                                </span>
+                                            </div>
+
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -72,6 +85,17 @@
         <script src="/js/jquery.js" crossorigin="anonymous"></script>
         <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="/js/rating.js" crossorigin="anonymous"></script>
+
+        <!-- DateTimePicker JavaScript -->
+        <script src="/js/datetimepicker/popper.min.js" crossorigin="anonymous"></script>
+        <script src="/js/datetimepicker/tempus-dominus.min.js" crossorigin="anonymous"></script>
+        <script src="/js/datetimepicker/solid.min.js"></script>
+        <script src="/js/datetimepicker/fontawesome.min.js"></script>
+        <script src="/js/datetimepicker/jQuery-provider.js"></script>
+        
+        <script src="/js/jquery.validate.min.js"></script>
+        <script src="/js/additional-methods.min.js"></script>
+
         <script src="/js/script.js" crossorigin="anonymous"></script>
     </body>
 </html>

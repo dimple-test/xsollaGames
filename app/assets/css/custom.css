@@ -18,3 +18,16 @@
 #rating > img {
     margin-right: .5rem!important;
 }
+
+label.error {
+    color: red;
+    font-size: 1rem;
+    display: block;
+    margin-top: 5px;
+}
+
+textarea.error, input.error {
+    border: 1px dashed red;
+    font-weight: 300;
+    color: red;
+}

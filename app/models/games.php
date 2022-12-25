@@ -95,6 +95,9 @@
                 $stmt->execute([$field => $value]);
                 if ($stmt->rowCount() > 0) {
                     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                    if ($result) {
+                        $result['last_played'] = date('m/d/Y h:i', strtotime($result['last_played']));
+                    }
                 }
             }
             return $result;

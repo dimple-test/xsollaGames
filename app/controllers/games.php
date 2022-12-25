@@ -31,8 +31,8 @@
                     'platform' => !empty($_POST['platform']) ? $_POST['platform'] : '',
                     'star_rating' => !empty($_POST['rating']) ? $_POST['rating'] : '',
                     'review' => !empty($_POST['review']) ? $_POST['review'] : '',
-                    'last_played' => !empty($_POST['last_played']) ? $_POST['last_played'] : '',
-                    'updated' => date('Y-m-d H:i:s')
+                    'last_played' => !empty($_POST['last_played']) ? date("Y-m-d G:i", strtotime($_POST['last_played'])) : date('Y/m/d G:i', time()),
+                    'updated' => date('Y-m-d G:i:s')
                 ];
                 $game = $this->model('GamesModel');
                 if (!empty($_POST['id'])) {
@@ -42,7 +42,7 @@
                         $response['message'] = 'Record updated succesfully';
                     }
                 } else {
-                    $gameData['created'] = date('Y-m-d H:i:s');
+                    $gameData['created'] = date('Y-m-d G:i:s');
                     $gameId = $game->addGame($gameData);
                     $response['message'] = 'Record added succesfully';
                 }

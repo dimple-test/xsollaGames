@@ -3,9 +3,10 @@ var rating = {};
 //Set the default icons
 rating.selectedIcon = '/img/selectedStar.svg';
 rating.unselectedIcon = '/img/unselectedStar.svg';
-rating.defaultRating = 3;
+rating.defaultRating = 0;
 rating.outOf = 5;
 rating.name = 'rating';
+rating.id = 'inputRating';
 
 rating.create = function(settings){
     //Set the icons if they have been set
@@ -18,6 +19,9 @@ rating.create = function(settings){
 
     //Set the default name
     this.name = settings.name || rating.name;
+
+    //Set the default id
+    this.id = settings.id || rating.id;
 
     //Set the classes
     var ratingClass = settings.ratingClass || {};
@@ -33,7 +37,7 @@ rating.create = function(settings){
     }
 
 
-    var html = '<input type="hidden" name="'+this.name+'" value="'+this.defaultRating+'">';
+    var html = '<input type="hidden" name="'+this.name+'" id="'+this.id+'" value="'+this.defaultRating+'">';
     //Create the ratings HTML
     for(var i = 0; i < this.defaultRating; i++) {
         html = html + startingHtml+this.selectedIcon+'" data-position="'+(i+1)+'"';
@@ -85,4 +89,16 @@ rating.create = function(settings){
     $(settings.selector + ' ' + subSelector).on('click', function() {
         $(this).siblings('input[name='+rating.name+']').val($(this).data('position'));
     });
+}
+
+function setReviewStar(val){
+    if(val || val == 0) {
+        $("#rating img").each(function(i, e) {
+            if(i < val) {
+                $(e).attr('src', rating.selectedIcon);
+            } else {
+                $(e).attr('src', rating.unselectedIcon);
+            }
+        });
+    }
 }

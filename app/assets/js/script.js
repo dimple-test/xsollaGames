@@ -23,48 +23,97 @@ $(document).ready(function() {
         }); 
     }
 
+    //TODO::Initialize datetimepicker
+    $('#datetimepicker1').tempusDominus({
+        localization: {
+            format: 'mm/dd/yyyy hh:mm',
+          }
+    });
+
+    //TODO::star rating
     rating.create({
         'selector': '#rating',
         'outOf': 5,
-        'defaultRating': 1,
+        'defaultRating': 0,
         'name':'rating',
         'ratingClass': ['me-2']
+    });
+    //TODO::Validate form
+    $("#addEditGameForm").validate({
+        ignore: "",
+        rules: {
+            title: {
+                required: true,
+            },
+            platform: {
+                required: true,
+            },
+            rating: {
+                required: true,
+            },
+            review: {
+                required: true,
+            },
+            last_played: {
+                required: true,
+            }
+        },
+        messages: {
+            title: "Title field is required.",
+            platform: "Title field is required.",
+            rating: "Rating selection is required.",
+            review: "Review field is required.",
+            last_played: "Last played field is required.",
+
+        },
+        errorPlacement: function(error, element) {
+            // var placement = $(element).data('error');
+            // console.log("element", element.attr("name"))
+            if(element.attr("name") == "last_played") {
+                error.insertAfter($("#datetimepicker1"))
+            } else {
+              error.insertAfter(element);
+            }
+        }
     });
 
     //TODO::Submit game form
     $( "#addEditGameForm" ).submit(function( e ) {
         e.preventDefault();
-        $.ajax({
-            url: "/app/games/addEdit",
-            type: "POST",
-            dataType: "json",
-            processData: false,
-            contentType: false,
-            data: new FormData(this),
-            context: document.body,
-            success: function(res) {
-                if (res && res.status == 1) {
-                    //TODO::append new added record
-                    // var gameRow = getGameRow(res.data);
-                    // if (gameRow) {
-                    //     $("#gameListTable").prepend(gameRow);
-                    // }
-
-                    $("#list-load").show();
-                    //TODO::update games list
-                    getGameList();
-
-                    $("#addEditGameModal").modal('hide');
-                    $("#addEditGameForm")[0].reset();
-                    
-                } else {
-
+        if ($( "#addEditGameForm" ).valid()) {
+            $.ajax({
+                url: "/app/games/addEdit",
+                type: "POST",
+                dataType: "json",
+                processData: false,
+                contentType: false,
+                data: new FormData(this),
+                context: document.body,
+                success: function(res) {
+                    if (res && res.status == 1) {
+                        //TODO::append new added record
+                        // var gameRow = getGameRow(res.data);
+                        // if (gameRow) {
+                        //     $("#gameListTable").prepend(gameRow);
+                        // }
+    
+                        $("#list-load").show();
+                        //TODO::update games list
+                        getGameList();
+    
+                        $("#addEditGameModal").modal('hide');
+                        $("#addEditGameForm")[0].reset();
+                        
+                    } else {
+    
+                    }
+                },
+                error: function (request, error) {
+                    console.log("Error" + error);
                 }
-            },
-            error: function (request, error) {
-                console.log("Error" + error);
-            }
-        });
+            });
+        }
+        
     });
     
     function getGameRow(data){
@@ -100,8 +149,12 @@ $(document).ready(function() {
                 if (res && res.status == 1 && res.data) {
                     $("#inputTitle").val(res.data.title ? res.data.title : '');
                     $("#inputPlatform").val(res.data.platform  ? res.data.platform : '');
+                    
                     $("#inputRating").val(res.data.star_rating ? res.data.star_rating : '');
+                    setReviewStar(res.data.star_rating ? res.data.star_rating : 0);
+
                     $("#inputReview").val(res.data.review ? res.data.review : '');
+                    
                     $("#inputLastPlay").val(res.data.last_played ? res.data.last_played : '');
                 } else {
 
@@ -113,9 +166,13 @@ $(document).ready(function() {
         });
     });
 
+    //TODO::reset add form
     $("#addGameBtn").on("click", function() {
         $("#addEditGameForm")[0].reset();
         $("#inputGameId").val("");
+        //TODO::reset star rating
+        $("#inputRating").val(0);
+        setReviewStar(0);
     });
 
     //TODO::delete game
@@ -140,7 +197,5 @@ $(document).ready(function() {
         }
         
     });
-
-    // $("#rating > img").css("margin-right", "5px");
 
  });
