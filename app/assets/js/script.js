@@ -2,18 +2,80 @@ $(document).ready(function() {
     $("#list-load").show();
     
     //TODO::get games list
-    getGameList();
+    // getGameList();
+
+    $('#gameListTable').DataTable({
+        processing: true,
+        serverSide: true,
+        columns: [
+            {
+                "data": null,
+                "defaultContent": "<button>Edit</button>",
+            },
+            {
+                "name": "title",
+                "searchable":true,
+                "orderable":true
+            },
+            {
+                "name": "platform",
+                "searchable":true,
+                "orderable":true
+            },
+            {
+                "name": "star_rating",
+                "searchable":true,
+                "orderable":true
+            },
+            {
+                "name": "review",
+                "searchable":true,
+                "orderable":true
+            },
+            {
+                "name": "last_played",
+                "searchable":true,
+                "orderable":true
+            },
+            {
+                "data": null,
+                "defaultContent": "<button>Edit</button>",
+            },
+        ],
+        ajax: {
+            url:'/app/games/dataTableList',
+            type:'POST',
+            /* Error handling */
+            error: function(xhr, error, thrown){
+                $(".example-grid-error").html("");
+                $("#example").append('<tbody class="example-grid-error"><tr><th colspan="3">No data found in the server. Error: ' + xhr.responseText + ' </th></tr></tbody>');
+                $("#example-grid_processing").css("display","none");
+            }
+        }
+    });
+
+    //TODO::enable Delete all button when select any
+    changeDeleteButtonState()
+
     function getGameList() {
         $.ajax({
             url: "/app/games/prepareGameList",
             type: "GET",
+            dataType: "json",
             success: function(res) {
-                if (res) {
-                    $("#gameList").html(res);
+                if (res.status) {
+                    $(".tableContent").html(res.data);
+                    if (res.recordCount == 0) {
+                        //Disable delete button
+                        $("#deleteGames").prop("disabled",true);
+                        $('#select_all').prop('checked',false);
+                        $("#select_all").prop("disabled",true);
+                    }
                 }
             },
             complete: function () {
-                $("#list-load").hide(); //Request is complete so hide spinner
+                // $("#list-load").hide(); //Request is complete so hide spinner
+                $('#list-load').attr('style','display:none !important');
             },
             error: function (request, error) {
                 console.log("Error" + error);
@@ -24,11 +86,72 @@ $(document).ready(function() {
     }
 
     //TODO::Initialize datetimepicker
-    $('#datetimepicker1').tempusDominus({
+    // var dateTImeObj = $('#datetimepicker1').tempusDominus({
+    //     localization: {
+    //         format: 'mm/dd/yyyy hh:mm',
+    //     },
+    //     display: {
+    //         buttons: {
+    //             close: true,
+    //         },
+    //     },
+        
+    // });
+
+    const datePicker = new tempusDominus.TempusDominus(document.getElementById('datetimepicker1'), {
+        restrictions: {
+            maxDate: new tempusDominus.DateTime(),
+        },
+        keepInvalid: false,
+        // ignoreReadonly: true,
         localization: {
             format: 'mm/dd/yyyy hh:mm',
-          }
+        },
+        display: {
+            buttons: {
+                close: true,
+            },
+        },
     });
+    // datePicker.disable();
+    // document.getElementById('datetimepicker1').addEventListener(tempusDominus.Namespace.events.focus, (e) => {
+    //     console.log("error");
+    // });
+
+    // document.getElementById('datetimepicker1').addEventListener(tempusDominus.Namespace.events.error, (e) => {
+    //     console.log("asds", e);
+    // });
+        
+
+    $(document).on('click', "#select_all",function( e ) {
+        if (this.checked) {
+            $('.checkbox').each(function(){
+                this.checked = true;
+            });
+        } else {
+            $('.checkbox').each(function(){
+                this.checked = false;
+            });
+        }
+        changeDeleteButtonState();
+    });
+    
+    $(document).on('click', ".checkbox",function( e ) {
+        if($('.checkbox:checked').length == $('.checkbox').length){
+            $('#select_all').prop('checked',true);
+        }else{
+            $('#select_all').prop('checked',false);
+        }
+        changeDeleteButtonState();
+    });
+
+    function changeDeleteButtonState() {
+        if ($('.checkbox:checked').length >= 1) {
+            $("#deleteGames").prop("disabled",false);
+        } else {
+            $("#deleteGames").prop("disabled",true);
+        }
+    }
 
     //TODO::star rating
     rating.create({
@@ -38,8 +161,47 @@ $(document).ready(function() {
         'name':'rating',
         'ratingClass': ['me-2']
     });
+
+    //TODO::reset add form
+    $("#addGameBtn").on("click", function() {
+        $("#addEditGameForm")[0].reset();
+        $("#inputGameId").val("");
+
+        //TODO::reset star rating
+        $("#inputRating").val(0);
+        setReviewStar(0);
+
+        //TODO::reset last played value to default
+        // var DateTimeVal = moment().subtract(1, 'hours').toDate();
+        var DateTimeVal = new tempusDominus.DateTime();
+        DateTimeVal.hours = DateTimeVal.hours - 1;
+        datePicker.dates.setValue(tempusDominus.DateTime.convert(DateTimeVal));
+    });
+    
+    //TODO::set alert
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+    const alert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible fade show" role="alert" data-mdb-delay="3000">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('')
+
+        alertPlaceholder.append(wrapper);
+
+        setTimeout(() => {
+            $('.alert').alert('close');
+        }, 3000);
+    }
+
     //TODO::Validate form
-    $("#addEditGameForm").validate({
+    jQuery.validator.addMethod("greaterThanZero", function(value, element) {
+        return this.optional(element) || (value > 0);
+    }, "Rating selection is required.");
+
+    var validator = $("#addEditGameForm").validate({
         ignore: "",
         rules: {
             title: {
@@ -49,7 +211,7 @@ $(document).ready(function() {
                 required: true,
             },
             rating: {
-                required: true,
+                greaterThanZero : true
             },
             review: {
                 required: true,
@@ -60,19 +222,19 @@ $(document).ready(function() {
         },
         messages: {
             title: "Title field is required.",
-            platform: "Title field is required.",
+            platform: "Platform field is required.",
             rating: "Rating selection is required.",
             review: "Review field is required.",
             last_played: "Last played field is required.",
 
         },
         errorPlacement: function(error, element) {
-            // var placement = $(element).data('error');
-            // console.log("element", element.attr("name"))
             if(element.attr("name") == "last_played") {
                 error.insertAfter($("#datetimepicker1"))
+            } else if (element.attr("name") == "rating") {
+                error.insertAfter($("#rating"))
             } else {
-              error.insertAfter(element);
+                error.insertAfter(element);
             }
         }
     });
@@ -103,17 +265,22 @@ $(document).ready(function() {
     
                         $("#addEditGameModal").modal('hide');
                         $("#addEditGameForm")[0].reset();
+
+                        alert(res.message, 'success');
                         
                     } else {
-    
+                        $("#addEditGameModal").modal('hide');
+                        $("#addEditGameForm")[0].reset();
+
+                        alert(res.message, 'danger')
                     }
                 },
                 error: function (request, error) {
                     console.log("Error" + error);
+                    alert("Something went wrong, please try again!", 'danger');
                 }
             });
         }
-        
     });
     
     function getGameRow(data){
@@ -134,12 +301,16 @@ $(document).ready(function() {
         return gameRow;
     }
 
+    $(".model-close-btn").on("click", function() {
+        if (typeof validator != "undefined") 
+            validator.resetForm();
+    });
+
     //TODO::get game existing data on update
     $(document).on('click', "a.editGame",function( e ) {
         e.preventDefault();
         var gameId = $(this).data('id');
         $(inputGameId).val(gameId);
-        
         $.ajax({
             url: "/app/games/getGameDetail",
             type: "GET",
@@ -155,7 +326,10 @@ $(document).ready(function() {
 
                     $("#inputReview").val(res.data.review ? res.data.review : '');
                     
-                    $("#inputLastPlay").val(res.data.last_played ? res.data.last_played : '');
+                    // var DateTimeVal = res.data.last_played ? moment(res.data.last_played).toDate() : '';
+                    var DateTimeVal = res.data.last_played ? new tempusDominus.DateTime(res.data.last_played) : '';
+                    
+                    datePicker.dates.setValue(tempusDominus.DateTime.convert(DateTimeVal));
                 } else {
 
                 }
@@ -165,21 +339,12 @@ $(document).ready(function() {
             }
         });
     });
-
-    //TODO::reset add form
-    $("#addGameBtn").on("click", function() {
-        $("#addEditGameForm")[0].reset();
-        $("#inputGameId").val("");
-        //TODO::reset star rating
-        $("#inputRating").val(0);
-        setReviewStar(0);
-    });
+    
 
     //TODO::delete game
     $(document).on('click', "a.deleteGame",function( e ) {
         var gameId = $(this).data('id');
         if (confirm("Are you sure you want to delete this game?") == true) {
-            console.log("sadsa", gameId);
             $.ajax({
                 url: "/app/games/deleteGame",
                 type: "GET",
@@ -189,13 +354,39 @@ $(document).ready(function() {
                     $("#list-load").show();
                     //TODO::update games list
                     getGameList();
+
+                    alert(res.message, 'success');
                 },
                 error: function (request, error) {
                     console.log("Error" + error);
+                    alert("Something went wrong, please try again!", 'danger');
                 }
             });
         }
-        
     });
+
+    $(document).on('click', "#deleteGames",function( e ) {
+        if (confirm("Are you sure you want to delete selected games?") == true) {
+            var delete_ids = $.map($('input[name^="ids"]:checked'), function(c){return c.value; });
+            $.ajax({
+                url: "/app/games/deleteGames",
+                type: "POST",
+                dataType: "json",
+                data: {ids: delete_ids},
+                success: function(res) {
+                    $("#list-load").show();
+                    //TODO::update games list
+                    getGameList();
+
+                    alert(res.message, 'success');
+                },
+                error: function (request, error) {
+                    console.log("Error" + error);
+                    alert("Something went wrong, please try again!", 'danger');
+                }
+            });
+        }
+    });
+    
 
  });

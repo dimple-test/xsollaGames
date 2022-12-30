@@ -7,8 +7,10 @@
         <link rel="stylesheet" href="/css/bootstrap-icons.css">
         <link href="/css/custom.css" rel="stylesheet" crossorigin="anonymous">
         
-        <!-- Tempus Dominus Styles -->
+        <!-- Datepicker Styles -->
         <link rel="stylesheet" href="/css/datetimepicker/tempus-dominus.min.css" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="/css/dataTables.bootstrap5.min.css" crossorigin="anonymous">
 
     </head>
     <body>
@@ -16,9 +18,15 @@
             <div class="container">
                 <?php include_once("header.php"); ?>
                 <div>
+                    <div id="liveAlertPlaceholder"></div>
+
+                    <button id="deleteGames" type="button" class="btn btn-primary">
+                        Delete Games
+                    </button>
+
                     <!-- Button trigger modal -->
-                    <button id="addGameBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEditGameModal">
-                        Add Game Details
+                    <button id="addGameBtn" type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#addEditGameModal">
+                        Add New Game
                     </button>
 
                     <!-- Modal -->
@@ -27,7 +35,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="addEditGameModalLabel">Add Game Details</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close model-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <form id="addEditGameForm" method="post" enctype="multipart/form-data">
                                     <input type="hidden" value="" name="id" id="inputGameId"/>
@@ -55,7 +63,7 @@
                                             
                                             <div class="input-group" id="datetimepicker1" data-td-target-input="nearest" data-td-target-toggle="nearest">
                                             
-                                                <input name="last_played" id="inputLastPlay" type="text" class="form-control" data-td-target="#datetimepicker1" />
+                                                <input name="last_played" id="inputLastPlay" type="text" class="form-control" data-td-target="#datetimepicker1" data-td-toggle="datetimepicker" readonly />
                                                 <span class="input-group-text" data-td-target="#datetimepicker1" data-td-toggle="datetimepicker">
                                                     <span class="fas fa-calendar"></span>
                                                 </span>
@@ -64,7 +72,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary model-close-btn" data-bs-dismiss="modal">Close</button>
                                         <button id="addGame" type="submit" class="btn btn-primary">submit</button>
                                     </div>
                                 </form>
@@ -72,11 +80,7 @@
                         </div>
                     </div>
                     <div id="gameList">
-                        <div id="list-load" class="d-flex justify-content-center">
-                            <div class="spinner-border text-danger" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
+                        <?php include('list.php'); ?>
                     </div>
                 </div>
                 <?php include_once("footer.php"); ?>
@@ -88,13 +92,20 @@
 
         <!-- DateTimePicker JavaScript -->
         <script src="/js/datetimepicker/popper.min.js" crossorigin="anonymous"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
         <script src="/js/datetimepicker/tempus-dominus.min.js" crossorigin="anonymous"></script>
         <script src="/js/datetimepicker/solid.min.js"></script>
         <script src="/js/datetimepicker/fontawesome.min.js"></script>
         <script src="/js/datetimepicker/jQuery-provider.js"></script>
         
+        <!-- Validation JavaScript -->
         <script src="/js/jquery.validate.min.js"></script>
         <script src="/js/additional-methods.min.js"></script>
+
+        <!-- Datatable JavaScript -->
+        <script src="/js/jquery.dataTables.min.js"></script>
+        <script src="/js/dataTables.bootstrap5.min.js"></script>
 
         <script src="/js/script.js" crossorigin="anonymous"></script>
     </body>

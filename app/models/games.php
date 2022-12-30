@@ -87,6 +87,27 @@
             }
         }
 
+        public function deleteGames($ids = "") {
+            if (!empty($ids)) {
+                $ids_query = str_repeat("?,", count($ids)-1) . "?";
+                $sql = "DELETE from games where id in ($ids_query)";
+                try{
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->execute($ids);
+                    // print_r($stmt);
+                    // exit;
+                    if ($stmt->rowCount() > 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }catch(Exception $e) {
+                    echo "Error: ".$e->getMessage();
+                    return false;
+                } 
+            }
+        }
+
         public function getGameByValue($field, $value) {
             $result = [];
             if (!empty($field) && !empty($value)) {
