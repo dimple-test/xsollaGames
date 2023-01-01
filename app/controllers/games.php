@@ -55,10 +55,10 @@
             require_once('config/tableData.php');
             $dataTable = new tableData($query);
             $dataTable->get();
+            
             echo  json_encode($dataTable->get());
             exit();
         }
-
 
         /**
          * Add/Edit games detail
@@ -114,7 +114,6 @@
             echo json_encode($response);
             exit;
         }
-
 
         public function getGameDetail() {
             $response = [

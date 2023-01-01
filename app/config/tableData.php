@@ -152,7 +152,7 @@ class tableData extends Database {
     private function setColumns()
     {
         $cols = self::optional($_REQUEST, 'columns', array());
-
+        $columns = $searchable = [];
         foreach ($cols as $column) {
             if (!empty($column['name'])) {
                 $columns[] = $column['name'];
@@ -161,7 +161,6 @@ class tableData extends Database {
                     $searchable[] = $column['name'];
                 }
             }
-            
         }
 
         $this->columns = $columns;
