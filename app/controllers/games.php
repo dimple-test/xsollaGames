@@ -1,5 +1,6 @@
 <?php
     class Games extends Controller{
+        use encryptDecrypt;
 
         /**
          * Get games list and return on list view
@@ -83,9 +84,10 @@
                     $game = $this->model('GamesModel');
                     if (!empty($_POST['id'])) {
                         //TODO:: Update game
-                        $gameUpdated = $game->editGame($gameData, $_POST['id']);
+                        $gameUpdated = $game->editGame($gameData, $this->convert_string('decrypt', $_POST['id']) );
                         if ($gameUpdated) {
                             $gameId = $_POST['id'];
+                            $response['status'] = 1;
                             $response['message'] = 'Game details updated succesfully';
                         }
                     } else {
@@ -122,7 +124,7 @@
             ];
             if (!empty($_GET) && !empty($_GET['id'])) {
                 $game = $this->model('GamesModel');
-                $gameDetail = $game->getGameByValue('id', $_GET['id']);
+                $gameDetail = $game->getGameByValue('id', $this->convert_string('decrypt', $_GET['id']));
                 if(!empty($gameDetail)){
                     $response = [
                         'status' => 1,
@@ -143,7 +145,7 @@
             ];
             if (!empty($_GET) && !empty($_GET['id'])) {
                 $game = $this->model('GamesModel');
-                $gameDeleted = $game->deleteGame($_GET['id']);
+                $gameDeleted = $game->deleteGame($this->convert_string('decrypt', $_GET['id']));
                 if ($gameDeleted) {
                     $response = [
                         'status' => 1,
@@ -164,7 +166,10 @@
             ];
             if (!empty($_POST) && !empty($_POST['ids']) && count($_POST["ids"]) > 0) {
                 $game = $this->model('GamesModel');
-                $gameDeleted = $game->deleteGames($_POST['ids']);
+                $decrypted_ids = array_map(function ($id) {
+                    return $this->convert_string('decrypt', $id);
+                }, $_POST['ids']);
+                $gameDeleted = $game->deleteGames($decrypted_ids);
                 if ($gameDeleted) {
                     $response = [
                         'status' => 1,

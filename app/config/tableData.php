@@ -1,6 +1,7 @@
 <?php
 
 class tableData extends Database {
+    use encryptDecrypt;
     private $connection;
     private $raw_query = array();
     private $select = "";
@@ -233,7 +234,12 @@ class tableData extends Database {
 
             // get column's index
             foreach ($this->columns as $index => $value) {
-                $nestedData[] = $row[$index];
+                if (!empty($value) && $value == 'id') {
+                    $nestedData[] = $this->convert_string('encrypt', $row[$index]);
+                } else {
+                    $nestedData[] = $row[$index];
+                }
+                
             }
 
             $data[] = $nestedData;
