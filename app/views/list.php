@@ -5,7 +5,7 @@
             <!-- <th scope="col">Id</th> -->
             <th scope="col">Title</th>
             <th scope="col">Platform</th>
-            <th scope="col">Star Rating</th>
+            <th scope="col">Rating (out of 5)</th>
             <th scope="col">Review Text</th>
             <th scope="col">Last Played</th>
             <th scope="col">Action</th>

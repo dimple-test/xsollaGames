@@ -31,3 +31,7 @@ textarea.error, input.error {
     font-weight: 300;
     color: red;
 }
+
+.mw-2{
+    max-width: 301px !important;
+}

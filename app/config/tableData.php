@@ -87,7 +87,7 @@ class tableData extends Database {
                  */
                 $column_formatted = str_replace(".", "_", $column);
 
-                $searchable_columns_statements[] = " $column ilike :$column_formatted ";
+                $searchable_columns_statements[] = " $column like :$column_formatted ";
                 $this->params[$column_formatted] = trim("%" . $this->search_value . "%");
             }
 

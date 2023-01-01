@@ -6,7 +6,7 @@
         <link href="/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
         <link rel="stylesheet" href="/css/bootstrap-icons.css">
         <link href="/css/custom.css" rel="stylesheet" crossorigin="anonymous">
-        
+        <title>Xsolla-Games</title>
         <!-- Datepicker Styles -->
         <link rel="stylesheet" href="/css/datetimepicker/tempus-dominus.min.css" crossorigin="anonymous">
 
@@ -42,11 +42,11 @@
                                     <div class="modal-body">      
                                         <div class="mb-3">
                                             <label for="inputTitle" class="form-label">Title</label>
-                                            <input name="title" type="text" class="form-control" id="inputTitle" aria-describedby="titleHelp">
+                                            <input name="title" type="text" class="form-control" id="inputTitle" aria-describedby="titleHelp" maxlength="40" />
                                         </div>
                                         <div class="mb-3">
                                             <label for="inputPlatform" class="form-label">Platform</label>
-                                            <input name="platform" type="text" class="form-control" id="inputPlatform" aria-describedby="platformHelp">
+                                            <input name="platform" type="text" class="form-control" id="inputPlatform" aria-describedby="platformHelp" maxlength="40" />
                                         </div>
                                         <div class="mb-3">
                                             <label for="inputRating" class="form-label">Rating</label>
@@ -55,7 +55,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="inputReview" class="form-label">Review</label>
-                                            <textarea name="review" class="form-control" id="inputReview" rows="3"></textarea>
+                                            <textarea name="review" class="form-control" id="inputReview" rows="3" maxlength="190"></textarea>
                                         </div>
                                         <div class="mb-3">
                                             <label for="inputLastPlay" class="form-label">Lastly Played on</label>
@@ -79,7 +79,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="gameList">
+                    <div id="gameList" class="pt-3">
                         <?php include('list.php'); ?>
                     </div>
                 </div>

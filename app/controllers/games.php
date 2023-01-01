@@ -50,11 +50,6 @@
         public function dataTableList() {
             $query = array(
                 "from" => " FROM games",
-                //  "where" => " WHERE last_activity between  :start_date AND  :end_date ",
-                "params" => array(
-                    'start_date'=>'2015-03-18',
-                    'end_date'=>'2016-03-18'
-                )
             );
             require_once('config/tableData.php');
             $dataTable = new tableData($query);
@@ -62,6 +57,8 @@
             echo  json_encode($dataTable->get());
             exit();
         }
+
+
         /**
          * Add/Edit games detail
          * 
@@ -95,7 +92,11 @@
                         //TODO:: Add new game
                         $gameData['created'] = date('Y-m-d G:i:s');
                         $gameId = $game->addGame($gameData);
-                        $response['message'] = 'Game added succesfully';
+                        if ($gameId) {
+                            $response['status'] = 1;
+                            $response['message'] = 'Game added succesfully';
+                        }
+                        
                     }
                     if (!empty($gameId)) {
                         $newRecord = $game->getGameByValue('id', $gameId);
@@ -174,6 +175,14 @@
             }
             echo json_encode($response);
             exit();
+        }
+
+        public function about() {
+            $this->view('about');
+        }
+
+        public function contact() {
+            $this->view('contact');
         }
 
     }

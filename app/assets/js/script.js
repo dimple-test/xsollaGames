@@ -7,10 +7,16 @@ $(document).ready(function() {
     $('#gameListTable').DataTable({
         processing: true,
         serverSide: true,
+        select: {
+            style: 'multi',
+            selector: '.select-checkbox',
+            items: 'row',
+        },
         columns: [
             {
-                "data": null,
-                "defaultContent": "<button>Edit</button>",
+                "name": "id",
+                "searchable":false,
+                "orderable": false
             },
             {
                 "name": "title",
@@ -30,17 +36,57 @@ $(document).ready(function() {
             {
                 "name": "review",
                 "searchable":true,
-                "orderable":true
+                "orderable":false
             },
             {
                 "name": "last_played",
                 "searchable":true,
-                "orderable":true
+                "orderable":true,
+                
             },
             {
                 "data": null,
-                "defaultContent": "<button>Edit</button>",
+                "defaultContent": "",
             },
+        ],
+        fixedColumns: true,
+        order: [[0, 'desc']],
+        "columnDefs": [
+            {
+                "orderable":false,
+                "targets": 0,
+                "render": function(data, type, row, meta){
+                    return '<input type="checkbox" class="form-check-input checkbox" value='+row[0]+' name="ids[]" />';  
+                }
+            },
+            { 
+                width: 100,
+                "targets": 2,
+            },
+            { 
+                "targets": 3,
+                "render": function(data, type, row, meta){
+                    return row[3]+' <img src="/img/selectedStar.svg" style="height:16px">';
+                }
+            },
+            { 
+                width: 100,
+                "targets": 4,
+                "className": "text-truncate mw-2"
+            },
+            { 
+                "targets": 5,
+                "render": function(data, type, row, meta){
+                    return new tempusDominus.DateTime( row[5]).format({ dateStyle: 'short', timeStyle: 'short'});
+                }
+            },
+            { 
+                "orderable":false,
+                "targets": 6,
+                "render": function(data, type, row, meta){
+                   return '<a class="editGame" data-id='+row[0]+' href="#" data-bs-toggle="modal" data-bs-target="#addEditGameModal"><i class="bi bi-pencil-square me-3"></i></a><a href="#" data-id='+row[0]+' class="deleteGame"><i class="bi bi-trash"></i></a>';  
+                }
+            }            
         ],
         ajax: {
             url:'/app/games/dataTableList',
@@ -86,24 +132,12 @@ $(document).ready(function() {
     }
 
     //TODO::Initialize datetimepicker
-    // var dateTImeObj = $('#datetimepicker1').tempusDominus({
-    //     localization: {
-    //         format: 'mm/dd/yyyy hh:mm',
-    //     },
-    //     display: {
-    //         buttons: {
-    //             close: true,
-    //         },
-    //     },
-        
-    // });
-
     const datePicker = new tempusDominus.TempusDominus(document.getElementById('datetimepicker1'), {
         restrictions: {
             maxDate: new tempusDominus.DateTime(),
+            minDate: new tempusDominus.DateTime('1970/01/01'),
         },
         keepInvalid: false,
-        // ignoreReadonly: true,
         localization: {
             format: 'mm/dd/yyyy hh:mm',
         },
@@ -113,14 +147,6 @@ $(document).ready(function() {
             },
         },
     });
-    // datePicker.disable();
-    // document.getElementById('datetimepicker1').addEventListener(tempusDominus.Namespace.events.focus, (e) => {
-    //     console.log("error");
-    // });
-
-    // document.getElementById('datetimepicker1').addEventListener(tempusDominus.Namespace.events.error, (e) => {
-    //     console.log("asds", e);
-    // });
         
 
     $(document).on('click', "#select_all",function( e ) {
@@ -174,7 +200,7 @@ $(document).ready(function() {
         //TODO::reset last played value to default
         // var DateTimeVal = moment().subtract(1, 'hours').toDate();
         var DateTimeVal = new tempusDominus.DateTime();
-        DateTimeVal.hours = DateTimeVal.hours - 1;
+        DateTimeVal.minutes = DateTimeVal.minutes - 1;
         datePicker.dates.setValue(tempusDominus.DateTime.convert(DateTimeVal));
     });
     
@@ -241,6 +267,8 @@ $(document).ready(function() {
 
     //TODO::Submit game form
     $( "#addEditGameForm" ).submit(function( e ) {
+        //disable submit button
+
         e.preventDefault();
         if ($( "#addEditGameForm" ).valid()) {
             $.ajax({
@@ -261,13 +289,14 @@ $(document).ready(function() {
     
                         $("#list-load").show();
                         //TODO::update games list
-                        getGameList();
+                        // getGameList();
     
                         $("#addEditGameModal").modal('hide');
                         $("#addEditGameForm")[0].reset();
 
                         alert(res.message, 'success');
-                        
+                        //TODO::reload datatable
+                        $('#gameListTable').DataTable().ajax.reload();
                     } else {
                         $("#addEditGameModal").modal('hide');
                         $("#addEditGameForm")[0].reset();
@@ -353,7 +382,10 @@ $(document).ready(function() {
                 success: function(res) {
                     $("#list-load").show();
                     //TODO::update games list
-                    getGameList();
+                    // getGameList();
+
+                    //TODO::reload datatable
+                    $('#gameListTable').DataTable().ajax.reload();
 
                     alert(res.message, 'success');
                 },
@@ -376,7 +408,9 @@ $(document).ready(function() {
                 success: function(res) {
                     $("#list-load").show();
                     //TODO::update games list
-                    getGameList();
+                    // getGameList();
+                    //TODO::reload datatable
+                    $('#gameListTable').DataTable().ajax.reload();
 
                     alert(res.message, 'success');
                 },
