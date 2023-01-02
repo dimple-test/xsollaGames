@@ -66,7 +66,14 @@ $(document).ready(function() {
             { 
                 "targets": 3,
                 "render": function(data, type, row, meta){
-                    return row[3]+' <img src="/img/selectedStar.svg" style="height:16px">';
+                    let td = "";
+                    for (let i = 1; i <= 5; i++) {
+                        if (i <= row[3])
+                            td += '<img src="/img/selectedStar.svg" style="height:16px">';
+                        else 
+                        td += '<img src="/img/unselectedStar.svg" style="height:16px">';
+                    }
+                    return td;
                 }
             },
             { 
@@ -190,6 +197,8 @@ $(document).ready(function() {
 
     //TODO::reset add form
     $("#addGameBtn").on("click", function() {
+        $("#addEditGameModalLabel").html("Add Game Detail");
+
         $("#addEditGameForm")[0].reset();
         $("#inputGameId").val("");
 
@@ -340,6 +349,7 @@ $(document).ready(function() {
         e.preventDefault();
         var gameId = $(this).data('id');
         $(inputGameId).val(gameId);
+        $("#addEditGameModalLabel").html("Update Game Detail");
         $.ajax({
             url: "/app/games/getGameDetail",
             type: "GET",
