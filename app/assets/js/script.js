@@ -1,6 +1,12 @@
 $(document).ready(function() {
     $("#list-load").show();
-    
+    console.log("asdsad");
+    $(document).on('click', ".nav-link", function(e){
+        console.log("sdsss", $(this));
+        $(".nav").find(".active").removeClass("active");
+        $(this).addClass("active");
+     });
+
     //TODO::get games list
     // getGameList();
 

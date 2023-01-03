@@ -1,5 +1,18 @@
 {
+    "name": "ishan/xsolla-games",
+    "description": "xsolla Games CRUD",
     "require": {
-        "robmorgan/phinx": "^0.12.10"
-    }
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ishan\\XsollaGames\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dimpal",
+            "email": "dimpalrana52@gmail.com"
+        }
+    ]
 }

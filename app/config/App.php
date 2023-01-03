@@ -1,4 +1,5 @@
 <?php
+    
     class App {
         protected $controller = "games";
         protected $method = "index";

@@ -21,7 +21,7 @@ class Controller {
                     if (empty(trim($val))) {
                         $res = false;
                         break;
-                    } else if ($k == "last_played") {
+                    } elseif ($k == "last_played") {
                         //TODO:: validate date
                         if (!$this->verifyDate(trim($val), true)) {
                             $res = false;
