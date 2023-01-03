@@ -1,17 +1,12 @@
 $(document).ready(function() {
     $("#list-load").show();
-    console.log("asdsad");
-    $(document).on('click', ".nav-link", function(e){
-        console.log("sdsss", $(this));
-        $(".nav").find(".active").removeClass("active");
-        $(this).addClass("active");
-     });
+    
 
     //TODO::get games list
     // getGameList();
 
     $('#gameListTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         select: {
             style: 'multi',
@@ -160,6 +155,7 @@ $(document).ready(function() {
             },
         },
     });
+    
         
 
     $(document).on('click', "#select_all",function( e ) {
@@ -437,6 +433,7 @@ $(document).ready(function() {
             });
         }
     });
+    
     
 
  });

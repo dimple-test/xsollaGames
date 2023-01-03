@@ -14,15 +14,16 @@
 
     </head>
     <body>
+        <?php include_once("header.php"); ?>
         <main>
             <div class="container">
-                <?php include_once("header.php"); ?>
                 <div>
                     <h3>About Us</h3>
                 </div>
-                <?php include_once("footer.php"); ?>
             </div>    
         </main>
+        <script src="/js/jquery.js" crossorigin="anonymous"></script>
+        <?php include_once("footer.php"); ?>
     </body>
 </html>
 

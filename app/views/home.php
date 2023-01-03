@@ -14,9 +14,9 @@
 
     </head>
     <body>
+        <?php include_once("header.php"); ?>
         <main>
             <div class="container">
-                <?php include_once("header.php"); ?>
                 <div>
                     <div id="liveAlertPlaceholder"></div>
 
@@ -83,9 +83,10 @@
                         <?php include('list.php'); ?>
                     </div>
                 </div>
-                <?php include_once("footer.php"); ?>
+                
             </div>
         </main>
+        
         <script src="/js/jquery.js" crossorigin="anonymous"></script>
         <script src="/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="/js/rating.js" crossorigin="anonymous"></script>
@@ -98,7 +99,7 @@
         <script src="/js/datetimepicker/solid.min.js"></script>
         <script src="/js/datetimepicker/fontawesome.min.js"></script>
         <script src="/js/datetimepicker/jQuery-provider.js"></script>
-        
+
         <!-- Validation JavaScript -->
         <script src="/js/jquery.validate.min.js"></script>
         <script src="/js/additional-methods.min.js"></script>
@@ -108,7 +109,9 @@
         <script src="/js/dataTables.bootstrap5.min.js"></script>
 
         <script src="/js/script.js" crossorigin="anonymous"></script>
+        <?php include_once("footer.php"); ?>
     </body>
+    
 </html>
 
 
