@@ -1,5 +1,5 @@
-## xsollaGames
-CRUD of games
+# xsollaGames
+Add, Edit, Delete and Update functionality for game lists
 
 Comes with :
 
@@ -7,13 +7,13 @@ Comes with :
 - Server: Nginx
 - Database: Mysql
 
-# Getting Started By Setting Up Environment
+## Getting Started By Setting Up Environment
 
 - git clone https://github.com/dimple-test/xsollaGames.git
 - cd xsollaGames
 - docker-compose up -d
 
-Now access http://locahost/app/games in your browser
+Now access http://localhost/app/games in your browser
 
 Some other useful commands :
 
