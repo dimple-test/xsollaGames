@@ -4,8 +4,8 @@ Add, Edit, Delete and many other functionalities for game list
 Comes with :
 
 - Web app: php:7.4
-- Server: Nginx
-- Database: Mysql
+- Server: Nginx:1.23
+- Database: Mysql: 8.0
 
 ## Getting Started By Setting Up Environment
 
@@ -23,3 +23,4 @@ Some other useful commands :
 - docker ps -a => To get list of containers with its status and other information
 - docker stop <container_id> => To stop containers (multiple containers seperated by space)
 - docker rm <container_id> => To remove stopped containers (multiple containers seperated by space)
+- docker exec -it <container_id> bash => To run container in bash
