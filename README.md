@@ -1,5 +1,5 @@
 # xsollaGames
-Add, Edit, Delete and Update functionality for game lists
+Add, Edit, Delete and many other functionalities for game lists
 
 Comes with :
 
