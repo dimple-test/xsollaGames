@@ -1,9 +1,9 @@
 # xsollaGames
-Add, Edit, Delete and many other functionalities for game lists
+Add, Edit, Delete and many other functionalities for game list
 
 Comes with :
 
-- Web app: php:7.2
+- Web app: php:7.4
 - Server: Nginx
 - Database: Mysql
 
